@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradiennt1"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="cliente.transporte.sd.transportecliente.DadosActivity"
+    tools:showIn="@layout/activity_dados">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gradiennt1"
+        android:gravity="center"
+        android:visibility="gone"
+        android:id="@+id/loadingProgress"
+        android:orientation="vertical"
+        >
+        <com.tuyenmonkey.mkloader.MKLoader
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:mk_type="Sharingan"
+            app:mk_color="@color/white"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="loading text"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:textSize="12sp"
+            android:id="@+id/loading_text"
+            android:gravity="center"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/verifyLayout"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:padding="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Digite o seu Nome"
+                        android:textSize="24dp"
+                        android:textColor="@color/white"
+                        android:layout_marginBottom="20dp"
+                        android:gravity="center_horizontal"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutNumero"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_shape"
+                            android:padding="8dp"
+                            android:gravity="center_vertical">
+
+                            <EditText
+                                android:id="@+id/tv_nome_completo"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="O seu nome"
+                                android:background="@android:color/transparent"
+                                android:inputType="text"
+                                android:singleLine="true" />
+
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/btn_finalizar"
+                            android:layout_width="match_parent"
+                            android:textColor="@color/white"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/filled_button"
+                            android:layout_marginTop="16dp"
+                            android:text="Finalizar"/>
+
+
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradiennt1"
+    tools:context="cliente.transporte.sd.transportecliente.LoginActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gradiennt1"
+        android:gravity="center"
+        android:visibility="gone"
+        android:id="@+id/loadingProgress"
+        android:orientation="vertical"
+        >
+        <com.tuyenmonkey.mkloader.MKLoader
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:mk_type="Sharingan"
+            app:mk_color="@color/white"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="loading text"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:textSize="12sp"
+            android:id="@+id/loading_text"
+            android:gravity="center"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/verifyLayout"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:padding="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Bazara Transporte"
+                        android:textSize="24dp"
+                        android:textColor="@color/white"
+                        android:layout_marginBottom="20dp"
+                        android:gravity="center_horizontal"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutNumero"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_shape"
+                            android:padding="8dp"
+                            android:gravity="center_vertical">
+
+                            <com.hbb20.CountryCodePicker
+                                android:id="@+id/code_telemovel"
+                                android:layout_width="wrap_content"
+                                app:ccp_showNameCode="false"
+                                app:ccpDialog_keyboardAutoPopup="false"
+                                app:ccp_autoDetectCountry="true"
+                                app:ccp_showArrow="false"
+                                android:layout_height="wrap_content" />
+
+                            <EditText
+                                android:id="@+id/numero_telemovel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Número de telemóvel"
+                                android:background="@android:color/transparent"
+                                android:inputType="phone"
+                                android:singleLine="true" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btn_autenticar"
+                        android:layout_width="match_parent"
+                        android:textColor="@color/white"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/corner_white_border"
+                        android:layout_marginTop="16dp"
+                        android:text="Iniciar Sessão"/>
+
+
+                </LinearLayout>
+            </RelativeLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:id="@+id/inputCodeLayout"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:text="Verificação"
+                    android:textSize="24sp"
+                    android:gravity="center"
+                    android:layout_marginTop="100dp"
+
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:text="Introduza o código de verificacção enviado para o seu número."
+                    android:gravity="center"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp"
+                    android:textSize="14sp"
+                    android:paddingTop="18dp"
+                    android:layout_marginBottom="20dp"
+                    />
+                <com.goodiebag.pinview.Pinview
+                    android:id="@+id/sms_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:pinWidth="30dp"
+                    app:pinHeight="30dp"
+                    app:pinLength="6"
+                    app:cursorVisible="false"
+                    app:forceKeyboard="false"
+                    app:hint="0"
+                    app:inputType="number"
+                    app:password="false"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:text="Não recebeu o código?"
+                    android:gravity="center"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp"
+                    android:textSize="12sp"
+                    android:paddingTop="18dp"
+                    android:layout_marginBottom="20dp"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="Aguarde por favor "
+                        android:textSize="12sp"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#f5ea3d"
+                        android:id="@+id/timer"
+                        tools:text="0:30 "
+                        android:textSize="12sp"
+                        />
+                </LinearLayout>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reenviar"
+                    android:paddingEnd="16dp"
+                    android:paddingStart="16dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_gravity="center"
+                    android:id="@+id/resend_code"
+                    android:background="@drawable/corner_white_border"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    />
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
