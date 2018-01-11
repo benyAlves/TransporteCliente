@@ -59,7 +59,7 @@ public class DadosActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(DadosActivity.this, "Utilizador Registado com exito", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(DadosActivity.this, MapsActivity.class));
+                startActivity(new Intent(DadosActivity.this, HomeActivity.class));
                 finish();
             }
         }).addOnFailureListener(new OnFailureListener() {
