@@ -4,15 +4,18 @@ package cliente.transporte.sd.transportecliente.model;
  * Created by SD on 1/10/2018.
  */
 
-public class ClientBazara {
+public class Rider {
 
     private String name;
-    private String telefone;
+    private String phone;
 
 
-    public ClientBazara(String name, String telefone) {
+    public Rider(){}
+
+
+    public Rider(String name, String phone) {
         this.name = name;
-        this.telefone = telefone;
+        this.phone = phone;
     }
 
 
@@ -24,11 +27,11 @@ public class ClientBazara {
         this.name = name;
     }
 
-    public String getTelefone() {
-        return telefone;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

@@ -3,10 +3,7 @@ package cliente.transporte.sd.transportecliente;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -21,8 +18,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cliente.transporte.sd.transportecliente.model.ClientBazara;
-import cliente.transporte.sd.transportecliente.model.User;
+import cliente.transporte.sd.transportecliente.common.Common;
+import cliente.transporte.sd.transportecliente.model.Rider;
 
 public class DadosActivity extends AppCompatActivity {
 
@@ -45,7 +42,7 @@ public class DadosActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         phone = getIntent().getExtras().getString("NUMERO");
         db = FirebaseDatabase.getInstance();
-        users = db.getReference("clients");
+        users = db.getReference(Common.user_rider_table);
     }
 
 
@@ -54,7 +51,7 @@ public class DadosActivity extends AppCompatActivity {
         verifyLayout.setVisibility(View.GONE);
         loadingProgress.setVisibility(View.VISIBLE);
 
-        ClientBazara user = new ClientBazara(tvNome.getText().toString(), phone);
+        Rider user = new Rider(tvNome.getText().toString(), phone);
         users.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
