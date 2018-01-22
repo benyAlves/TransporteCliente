@@ -7,31 +7,31 @@ package cliente.transporte.sd.transportecliente.model;
 public class Sender {
 
     public Notification notification;
-    private String destination;
+    private String to;
 
 
     public Sender() {
     }
 
-    public Sender(Notification notification, String destination) {
-        this.notification = notification;
-        this.destination = destination;
-    }
 
-    public Notification getNotification() {
-        return notification;
+    public Sender(Notification notification, String to) {
+        this.notification = notification;
+        this.to = to;
     }
 
     public void setNotification(Notification notification) {
         this.notification = notification;
     }
 
-    public String getDestination() {
-        return destination;
+    public void setTo(String to) {
+        this.to = to;
     }
 
-    public void setDestination(String destination) {
-        this.destination = destination;
+    public Notification getNotification() {
+        return notification;
     }
 
+    public String getTo() {
+        return to;
+    }
 }

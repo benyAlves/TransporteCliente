@@ -243,8 +243,9 @@ public class LoginActivity extends AppCompatActivity {
             showView(inputCodeLayout);
             hideView(loadingProgress);
 
+            Log.w(TAG, "attemptLogin number: "+ phone);
             //go ahead and verify number
-            startPhoneNumberVerification(phone);
+            startPhoneNumberVerification("+"+phone);
             //time to show retry button
             counter = new CountDownTimer(45000, 1000) {
                 @Override

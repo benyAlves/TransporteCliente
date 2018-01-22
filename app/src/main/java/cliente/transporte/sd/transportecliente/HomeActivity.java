@@ -5,6 +5,7 @@ import android.location.Location;
 
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,6 +32,9 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -102,6 +106,11 @@ public class HomeActivity extends AppCompatActivity
 
     IFCMService ifcmService;
 
+    DatabaseReference driversAvailable;
+    PlaceAutocompleteFragment place_destination;
+
+    String mPlaceLocation, mPlaceDestination;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,14 +135,15 @@ public class HomeActivity extends AppCompatActivity
 
 
 
+
         imgExpandable = (ImageView) findViewById(R.id.imgExpandable);
-        mBottomSheet = BottomSheetClienteFragment.newInstance("Rider boot sheet");
-        imgExpandable.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mBottomSheet.show(getSupportFragmentManager(), mBottomSheet.getTag());
-            }
-        });
+//        mBottomSheet = BottomSheetClienteFragment.newInstance("Rider boot sheet");
+//        imgExpandable.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mBottomSheet.show(getSupportFragmentManager(), mBottomSheet.getTag());
+//            }
+//        });
 
         btnPickupRequest = (Button) findViewById(R.id.btnPickupRequest);
         btnPickupRequest.setOnClickListener(new View.OnClickListener() {
@@ -143,6 +153,35 @@ public class HomeActivity extends AppCompatActivity
                     requestPickupHere(FirebaseAuth.getInstance().getCurrentUser().getUid());
                 else
                     sendRequestToDriver(driverId);
+            }
+        });
+
+        place_destination = (PlaceAutocompleteFragment)getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        place_destination.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                mMap.clear();
+                mPlaceLocation = mUserMarker.getTitle();
+                mPlaceDestination = place.getAddress().toString();
+
+                mUserMarker = mMap.addMarker(new MarkerOptions().position(mUserMarker.getPosition())
+                .icon(BitmapDescriptorFactory.defaultMarker())
+                .title("Pegar aqui"));
+
+
+                 mMap.addMarker(new MarkerOptions().position(place.getLatLng())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 15.0f));
+
+
+                BottomSheetClienteFragment mBottomSheet = BottomSheetClienteFragment.newInstance(mPlaceLocation, mPlaceDestination);
+                mBottomSheet.show(getSupportFragmentManager(), mBottomSheet.getTag());
+            }
+
+            @Override
+            public void onError(Status status) {
+
             }
         });
 
@@ -172,20 +211,22 @@ public class HomeActivity extends AppCompatActivity
 
                             String json_lat_lng = new Gson().toJson(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
 
-                            Notification notification = new Notification("EDMTDEV", json_lat_lng);
+                            String clienteToken = FirebaseInstanceId.getInstance().getToken();
+                            Notification notification = new Notification(clienteToken, json_lat_lng);
                             Sender sender = new Sender(notification, token.getToken());
                             ifcmService.sendMessage(sender)
                                      .enqueue(new Callback<FCMResponse>() {
                                         @Override
                                         public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
 
-                                            Log.w("ERROR", "error "+response.message());
-                                            Toast.makeText(HomeActivity.this, response.message(), Toast.LENGTH_SHORT);
+                                            Log.w("ERROR", "error h "+response.code());
+                                            Log.w("ERROR", "error m "+response.body().success);
+//                                            Toast.makeText(HomeActivity.this, response.message(), Toast.LENGTH_SHORT);
 
                                             if(response.body().success == 1){
-                                                Toast.makeText(HomeActivity.this, "Request sent", Toast.LENGTH_SHORT);
+                                                Toast.makeText(HomeActivity.this, "Request sent", Toast.LENGTH_SHORT).show();
                                             }else
-                                                Toast.makeText(HomeActivity.this, "Request failed", Toast.LENGTH_SHORT);
+                                                Toast.makeText(HomeActivity.this, "Request failed", Toast.LENGTH_SHORT).show();
                                         }
 
                                         @Override
@@ -214,14 +255,14 @@ public class HomeActivity extends AppCompatActivity
 
 
         mUserMarker = mMap.addMarker(new MarkerOptions()
-                .title("Pickup Here")
+                .title("Me levar aqui")
                 .snippet("")
                 .position(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
         mUserMarker.showInfoWindow();
 
-        btnPickupRequest.setText("Getting your driver...");
+        btnPickupRequest.setText("A escolher transp...");
 
         findDriver();
 
@@ -310,6 +351,21 @@ public class HomeActivity extends AppCompatActivity
 
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if(mLastLocation != null){
+
+            driversAvailable = FirebaseDatabase.getInstance().getReference(Common.driver_table);
+            driversAvailable.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    loadAllDriversAvailable(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
                 final double latitude = mLastLocation.getLatitude();
                 final double longitude = mLastLocation.getLongitude();
 
@@ -324,19 +380,28 @@ public class HomeActivity extends AppCompatActivity
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15.0f));
 
 //                        rotateMarker(mCurrentMarker, -360, mMap);
-                        loadAllDriversAvailable();
+                        loadAllDriversAvailable(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
 
         }else {
             Log.w(TAG, "displayLocation: cant get it");
         }
     }
 
-    private void loadAllDriversAvailable() {
+    private void loadAllDriversAvailable(final LatLng location) {
+
+        //remover todos marcadores no mapa
+        mMap.clear();
+
+        //adicionar minha  localizacao
+        mMap.addMarker(new MarkerOptions()
+                .position(location)
+                .title("Estas aqui"));
+
         DatabaseReference driverLocation = FirebaseDatabase.getInstance().getReference(Common.driver_table);
 
         Log.w(TAG, "loadAllDriversAvailable: "+driverLocation.getKey());
         GeoFire geoFire = new GeoFire(driverLocation);
-        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude()), distance);
+        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(location.latitude, location.longitude), distance);
         geoQuery.removeAllListeners();
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
 
@@ -355,7 +420,8 @@ public class HomeActivity extends AppCompatActivity
                                 mMap.addMarker(new MarkerOptions()
                                                 .position(new LatLng(location.latitude, location.longitude))
                                                 .flat(true)
-                                                .title(cliente.getPhone())
+                                                .title(cliente.getName())
+                                                .snippet("Cell: "+cliente.getPhone())
                                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.car)));
                             }
 
@@ -380,7 +446,7 @@ public class HomeActivity extends AppCompatActivity
             public void onGeoQueryReady() {
                 if( distance < LIMIT){
                     distance ++;
-                    loadAllDriversAvailable();
+                    loadAllDriversAvailable(location);
                 } // procurar dentro de 3 km
                 Log.w(TAG, "onGeoReady: " );
             }
@@ -484,8 +550,8 @@ public class HomeActivity extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap) {
        mMap = googleMap;
        mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.getUiSettings().setZoomGesturesEnabled(true);
-        mMap.setInfoWindowAdapter(new CustomInfo(this));
+       mMap.getUiSettings().setZoomGesturesEnabled(true);
+       mMap.setInfoWindowAdapter(new CustomInfo(this));
     }
 
     @Override
