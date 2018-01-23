@@ -20,4 +20,5 @@ public class GoogleMapAPI {
 
         return retrofitClient;
     }
+
 }

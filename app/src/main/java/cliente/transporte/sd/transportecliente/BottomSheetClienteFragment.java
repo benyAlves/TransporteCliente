@@ -36,6 +36,7 @@ public class BottomSheetClienteFragment extends BottomSheetDialogFragment
     private double riderLat;
     private double riderLng;
     private TextView tvDistance;
+    boolean isTapOnMap;
 
     public static  BottomSheetClienteFragment newInstance(String location, String destination, Location l){
         BottomSheetClienteFragment bf = new BottomSheetClienteFragment();
