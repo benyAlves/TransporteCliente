@@ -77,23 +77,23 @@ public class BottomSheetClienteFragment extends BottomSheetDialogFragment
         TextView tvDestination = (TextView)view.findViewById(R.id.destination);
         tvDistance = (TextView)view.findViewById(R.id.distance);
 
-
+        getPrice(mLocation, mDestination);
         tvLocation.setText(mLocation);
         tvDestination.setText(mDestination);
         getDistance();
         return view;
     }
 
-    private void getDistance() {
-
+    private void getPrice(String mLocation, String mDestination) {
         String requestAPI;
         try {
             requestAPI = "https://maps.googleapis.com/maps/api/directions/json?" +
                     "mode=driving&" +
                     "transit_routing_preference=less_driving&" +
-                    "origin=" +mLocation+ "&" +
-                    "destination=" + riderLat + "," + riderLng + "&" +
-                    "key=" + getResources().getString(R.string.google_maps_key);
+                    "origin=" +riderLat + "," + riderLng+ "&" +
+                    "destination=" +mDestination+ "&" +
+                    "key=" + getResources().getString(R.string.google_map_server_key);
+
             mService.getPath(requestAPI).enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
@@ -111,8 +111,10 @@ public class BottomSheetClienteFragment extends BottomSheetDialogFragment
                         Double distance_value = Double.parseDouble(distance_text.replaceAll("[^0-9\\\\.]+",""));
                         JSONObject time = legsObject.getJSONObject("duration");
                         String time_text = time.getString("text");
-                        String distanceTime = String.format("%s + %s", distance_text, time_text);
-                        tvDistance.setText(distanceTime);
+                        Integer time_value = Integer.parseInt(time_text.replaceAll("\\D+",""));
+                        String finalCalculate = String.format("%s + %s = %.2f MTn", distance_text, time_text,
+                                Common.calculatePrice(distance_value, time_value));
+                        tvDistance.setText(finalCalculate);
 
                     }catch (JSONException e){
                         e.printStackTrace();
@@ -128,6 +130,11 @@ public class BottomSheetClienteFragment extends BottomSheetDialogFragment
         }catch (Exception ex){
             ex.printStackTrace();
         }
+    }
+
+    private void getDistance() {
+
+
     }
 
     @Override

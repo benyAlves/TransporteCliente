@@ -22,6 +22,15 @@ public class Common {
     public static final String token_table = "tokens";
     public static final String MESSAGE = "message";
 
+    private static double base_fare = 100; //
+    private static double time_rate = 20; // custo por min
+    private static double distance_rate = 80; // custo por km
+
+    public static double calculatePrice(double km, int min){
+        return (base_fare+ (time_rate*min) + (distance_rate*km));
+    }
+
+
     public static InterfaceAPI getGoogleAPI(){
         return ClientAPI.getClient(baseURL).create(InterfaceAPI.class);
     }

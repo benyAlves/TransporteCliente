@@ -24,6 +24,7 @@
         <ImageView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
             android:src="@drawable/ic_action_location"
             android:layout_weight="1"/>
 
@@ -46,6 +47,7 @@
 
             <ImageView
                 android:layout_width="0dp"
+                android:layout_marginRight="16dp"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_action_destination"
                 android:layout_weight="1"/>
@@ -71,6 +73,7 @@
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
                 android:src="@drawable/ic_action_time_distance"
                 android:layout_weight="1"/>
 
@@ -79,8 +82,7 @@
                 android:id="@+id/distance"
                 android:layout_width="0dp"
                 android:layout_gravity="center_vertical"
-                android:layout_height="wrap_content"
-                android:text="20km  + 23 min"/>
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
